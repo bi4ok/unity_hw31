@@ -4,11 +4,27 @@ using UnityEngine;
 
 public class InputController : MonoBehaviour
 {
+    private bool _isBegin=false;
+
     public Vector2 GetTouchDelta()
     {
         if (Input.touchCount > 0)
         {
-            return Input.GetTouch(0).deltaPosition;
+            Touch currentTouch = Input.GetTouch(0);
+            if (currentTouch.phase == TouchPhase.Began)
+            {
+                _isBegin = true;
+            }
+            else if (currentTouch.phase == TouchPhase.Ended)
+            {
+                _isBegin = false;
+                return Vector2.zero;
+            }
+            if (_isBegin)
+            {
+                return currentTouch.deltaPosition;
+            }
+            
         }
         return Vector2.zero;
     }
